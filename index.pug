@@ -1,0 +1,41 @@
+html
+  head
+    title Magic Mirror
+    link(rel='stylesheet', type='text/css', href='css/main.css')
+    link(rel='stylesheet', type='text/css', href='css/weather-icons.css')
+    link(rel='stylesheet', type='text/css', href='css/font-awesome.css')
+    link(rel='stylesheet', type='text/css', href='css/m8.css')
+    meta(name='google', value='notranslate')
+    meta(http-equiv='Content-type', content='text/html; charset=utf-8')
+    link(rel='icon', href='data:;base64,iVBORw0KGgo=')
+  body.m8-mirror-font.m8-mirror.m8-text-white(style='background-color: #000; height: 100%')
+    .m8-container.m8-display-topright
+      #time.time.m8-right-align
+      .date.small(style='margin-top: -20px')
+      
+    .m8-container.m8-display-topleft
+      .temp
+      .rainChance
+    
+    .m8-container.m8-display-above-bottommiddle.m8-center(style="width:100%")
+      .compliment.light
+      
+    .m8-display-bottommiddle.m8-center(style="width:100%")
+      .news.medium
+    script.
+      if (typeof module === 'object') {window.module = module; module = undefined;}
+    script(src='js/jquery.js')
+    script(src='js/jquery.feedToJSON.js')
+    script(src='js/ical_parser.js')
+    script(src='js/moment-with-locales.min.js')
+    script(src='js/paho/mqttws31.js')
+    script(src='js/config.js')
+    script(src='js/rrule.js')
+    script(src='js/version/version.js')
+    script(src='js/calendar/calendar.js')
+    script(src='js/compliments/compliments.js')
+    script(src='js/weather/weather.js')
+    //script(src='js/temp_hum/tem_hum.js')
+    script(src='js/time/time.js')
+    script(src='js/news/news.js')
+    script(src='js/main.js')
