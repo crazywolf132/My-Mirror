@@ -17,13 +17,6 @@ var config = {
         //units: metric or imperial
         interval: 120000,
         fadeInterval: 10000,
-        params: {
-            q: 'dalian',
-            units: 'metric',
-            // if you want a different lang for the weather that what is set above, change it here
-            lang: 'en-au',
-            APPID: ''
-        }
     },
     compliments: {
         interval: 30000,
