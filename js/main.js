@@ -31,19 +31,7 @@ jQuery(document).ready(function($) {
 	var lastCompliment;
 	var compliment;
 
-    moment.locale(config.lang);
-
-	//connect do Xbee monitor
-	// var socket = io.connect('http://rpi-alarm.local:8082');
-	// socket.on('dishwasher', function (dishwasherReady) {
-	// 	if (dishwasherReady) {
-	// 		$('.dishwasher').fadeIn(2000);
-	// 		$('.lower-third').fadeOut(2000);
-	// 	} else {
-	// 		$('.dishwasher').fadeOut(2000);
-	// 		$('.lower-third').fadeIn(2000);
-	// 	}
-	// });
+  moment.locale(config.lang);
 
 	//displayer.init();
 
@@ -56,10 +44,7 @@ jQuery(document).ready(function($) {
 	compliments.init();
 
 	weather.init();
-	//weather.init();
 
 	news.init();
-
-	//tem_hum.init();
 
 });

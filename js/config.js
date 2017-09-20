@@ -25,14 +25,6 @@ var config = {
             APPID: ''
         }
     },
-    tem_hum: {
-      mqttServer: 'mqtt.hellowk.cc',
-      mqttServerPort: 9001,
-      mqttclientName: "magic_mirror_tem_hum",
-      temperatureTopic: 'homekit/himitsu/temperature',
-      humidityTopic: 'homekit/himitsu/humidity',
-      heatIndexTopic: 'homekit/himitsu/heatIndex'
-    },
     compliments: {
         interval: 30000,
         fadeInterval: 4000,
@@ -61,22 +53,6 @@ var config = {
 			symbol: 'calendar-plus-o',
 			url: 'webcal://files.apple.com/calendars/Australian32Holidays.ics'
 		},
-		//{
-		//	symbol: 'soccer-ball-o',
-		//	url: 'https://www.google.com/calendar/ical/akvbisn5iha43idv0ktdalnor4%40group.calendar.google.com/public/basic.ics',
-		//},
-		//{
-		//	 symbol: 'mars',
-		//	 url: "https://server/url/to/his.ics",
-		// },
-		// {
-		//	 symbol: 'venus',
-		//	 url: "https://server/url/to/hers.ics",
-		// },
-		// {
-		//	 symbol: 'venus-mars',
-		//	 url: "https://server/url/to/theirs.ics",
-		// },
 		]
     },
     news: {
