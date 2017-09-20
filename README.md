@@ -17,5 +17,5 @@ everyone who uses this project will need to generate their own!
 1) Sign up to `https://darksky.net/dev/register` or, login at `https://darksky.net/dev/login`
 2) Collect `Your Secret Key` from the text box.
 3) Navigate to `/My-Mirror/js/api.js` on your computer (Place where you installed the `My-Mirror`)
-4) Insert your secret key to the `key` feild provided.
+4) Insert your secret key to the `key` field provided.
 5) Run the mirror and enjoy!
