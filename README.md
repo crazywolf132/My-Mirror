@@ -19,3 +19,15 @@ everyone who uses this project will need to generate their own!
 3) Navigate to `/My-Mirror/js/api.js` on your computer (Place where you installed the `My-Mirror`)
 4) Insert your secret key to the `key` field provided.
 5) Run the mirror and enjoy!
+
+#### --- To get your current location ---
+1) Go to `http://www.latlong.net/countries.html` in your browser.
+2) Find the current city you are in.
+3) Select the appropriate category. Eg. `Towns`.
+4) Find your place (from the category you chose before)
+5) Write down the `Longitude` and `Latitude` somewhere, and remember what is what.
+6) Navigate to `/My-Mirror/js/api.js`
+7) Fill in the `lon` field with the `Longitude` number you wrote down before.
+8) Fill in the `lat` field with the `Latitude` number you wrote down before.
+8) Restart mirror.
+9) Gaze upon the current weather of your location.
