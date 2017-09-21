@@ -1,0 +1,9 @@
+{
+  "display": {
+    "time": false,
+    "compliment": true,
+    "temp": true,
+    "news": true,
+    "date": true
+  }
+}

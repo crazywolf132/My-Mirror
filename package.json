@@ -6,6 +6,7 @@
     "start": "./starter.sh"
   },
   "dependencies": {
+    "config-js": "^1.1.9",
     "connect": "",
     "electron": "^1.4.5",
     "electron-pug": "^1.5.1",

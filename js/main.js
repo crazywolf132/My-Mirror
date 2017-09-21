@@ -31,9 +31,14 @@ jQuery(document).ready(function($) {
 	var lastCompliment;
 	var compliment;
 
+	var Config = require('config-js');
+	var config = new Config('./config/default.js')
+
+
+
   moment.locale(config.lang);
 
-	//displayer.init();
+	displayer.init();
 
 	version.init();
 

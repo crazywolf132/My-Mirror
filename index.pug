@@ -10,18 +10,24 @@ html
     link(rel='icon', href='data:;base64,iVBORw0KGgo=')
   body.m8-mirror-font.m8-mirror.m8-text-white(style='background-color: #000; height: 100%')
     .m8-container.m8-display-topright
-      #time.time.m8-right-align
-      .date.small(style='margin-top: -20px')
+      .timeSection.showable
+        #time.time.m8-right-align
+      .dateSection.showable
+        .date.small(style='margin-top: -20px')
       
     .m8-container.m8-display-topleft
-      .temp
-      .rainChance
+      .tempSection.showable
+        .temp
+      .rainSection.showable
+        .rainChance
     
     .m8-container.m8-display-above-bottommiddle.m8-center(style="width:100%")
-      .compliment.light
+      .complimentSection.showable
+        .compliment.light
       
     .m8-display-bottommiddle.m8-center(style="width:100%")
-      .news.medium
+      .newsSection.showable
+        .news.medium
     script.
       if (typeof module === 'object') {window.module = module; module = undefined;}
     script(src='js/jquery.js')
@@ -38,4 +44,5 @@ html
     script(src='js/weather/weather.js')
     script(src='js/time/time.js')
     script(src='js/news/news.js')
+    script(src='js/displayer/displayer.js')
     script(src='js/main.js')

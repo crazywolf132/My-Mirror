@@ -26,7 +26,7 @@ function roundTemp (temp) {
 }
 
 weather.updateCurrentWeather = function () {
-  $.getJSON('https://api.darksky.net/forecast/' + api.key + '/' + api.lat + ',' + api.long, function(json, textStatus) {
+  $.getJSON('https://api.darksky.net/forecast/' + api.key + '/' + api.lat + ',' + api.lon, function(json, textStatus) {
     var current = json.currently;
     var temp = roundTemp(current.temperature);
     var feelsLikeTemp = roundTemp(current.apparentTemperature);
