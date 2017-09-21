@@ -1,9 +1,10 @@
 {
   "display": {
-    "time": false,
+    "time": true,
     "compliment": true,
     "temp": true,
     "news": true,
-    "date": true
+    "date": true,
+    "rain": true
   }
 }

@@ -4,7 +4,7 @@ var displayer = {
 }
 
 var Config = require('config-js');
-var config = new Config('./config/default.js');
+var config = new Config('./config/default.json');
 
 displayer.getStatus = function () {
 
@@ -17,25 +17,29 @@ displayer.getStatus = function () {
   var dateEl          = config.get('display.date');
   var rainEl          = config.get('display.rain');
 
-
   var currentTimeEl   = $('.timeSection');
   var currentCompEl   = $('.complimentSection');
   var currentWeather  = $('.tempSection');
   var currentNewsEl   = $('.newsSection');
   var currentDateEl   = $('.dateSection');
   var currentRainEl   = $('.rainSection');
+  var notificationEl  = $('.notes');
 
   if (currentTimeEl.hasClass(Shown)) {
     if (!timeEl) {
       currentTimeEl.removeClass(Shown)
       currentTimeEl.addClass(Hidden);
       currentTimeEl.css("display", "none")
+      if ($('.date').hasClass('move-up')) {
+        $('.date').removeClass('move-up')
+      }
     }
   }else if (currentTimeEl.hasClass(Hidden)) {
     if (timeEl) {
       currentTimeEl.removeClass(Hidden)
       currentTimeEl.addClass(Shown)
       currentTimeEl.css("display", "block")
+      $('.date').addClass('move-up')
     }
   }
 

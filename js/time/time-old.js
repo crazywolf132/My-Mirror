@@ -57,7 +57,7 @@ time.updateTime = function () {
 			}
 		});
 		//This is where ill do the time reminders section...
-
+		
 
 
 		if ($('.fade').length == 0) {

@@ -10,6 +10,7 @@
     "connect": "",
     "electron": "^1.4.5",
     "electron-pug": "^1.5.1",
+    "fs": "0.0.1-security",
     "jquery": "^3.2.1",
     "ncp": "",
     "pug": "^2.0.0-rc.4",

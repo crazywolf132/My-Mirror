@@ -22,6 +22,10 @@ html {
   top: 50px;
 }
 
+.move-up {
+  margin-top: -20px;
+}
+
 .left {
   position: absolute;
   left: 50px;
