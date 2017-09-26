@@ -35,9 +35,13 @@ jQuery(document).ready(function($) {
 
 	displayer.init();
 
+	remoteApp.init();
+
 	version.init();
 
 	time.init();
+
+	//reminder.init();
 
 	calendar.init();
 

@@ -4,7 +4,7 @@ var displayer = {
 }
 
 var Config = require('config-js');
-var config = new Config('./config/default.json');
+var config = new Config('./config/default.js');
 
 displayer.getStatus = function () {
 
