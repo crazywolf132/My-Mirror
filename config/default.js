@@ -1,9 +1,9 @@
 module.exports = {
   display: {
     time: true,
-    compliment: false,
+    compliment: true,
     temp: true,
-    news: true,
+    news: false,
     date: true,
     rain: true
   }

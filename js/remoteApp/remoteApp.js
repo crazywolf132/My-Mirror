@@ -5,6 +5,9 @@ var remoteApp = {
 var socketIO;
 var view;
 
+var Config = require('config-js');
+var config = new Config('./config/default.js');
+
 remoteApp.init = function () {
   view = new View();
   var MAIN_DIR = __dirname.replace("system","");
@@ -39,20 +42,11 @@ remoteApp.init = function () {
 		});
 
     socket.on('change-view', function (item) {
-      if (String(item) === 'time'){
-
-      } else if (String(item) === 'compliment') {
-
-      } else if (String(item) === 'temp') {
-
-      } else if (String(item) === 'news') {
-
-      } else if (String(item) === 'date') {
-
-      } else if (String(item) === 'rain') {
-        
-      }
+      changeIcons(item)
     })
+
+    data = getCurrentIcons();
+    socket.emit('whats-running', data)
 
 		var webview = document.querySelector("#mainAppView");
 		if(webview){
@@ -63,4 +57,35 @@ remoteApp.init = function () {
 	socketIO.on('disconnect',function(){
 		view.showToast("Device disconnected");
 	});
+}
+
+function changeIcons(item) {
+  //time,date,weather,rain,news,compliment
+  var PythonShell = require('python-shell');
+  var options = {
+    mode: 'text',
+    args: [String(item)]
+  };
+  var shell = new PythonShell('main.py', { args: [String(item)] });
+
+  shell.on('message', function (message) {
+    // received a message sent from the Python script (a simple "print" statement)
+    console.log(message)
+    socketIO.emit('whats-updated', item, message)
+    socketIO.emit('all-done')
+  });
+
+}
+
+function getCurrentIcons(){
+  var time          = config.get('display.time');
+  var compliments   = config.get('display.compliment');
+  var weather       = config.get('display.temp');
+  var news          = config.get('display.news');
+  var date          = config.get('display.date');
+  var rain          = config.get('display.rain');
+  //console.log('time,date,weather,rain,news,compliment')
+  var _string = time+"/"+date+"/"+weather+"/"+rain+"/"+news+"/"+compliments
+  //console.log(_string)
+  return _string
 }

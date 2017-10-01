@@ -9,101 +9,93 @@ var currentAppIndex;
 var homeAppIndex=0;
 
 var appList = [];
-		
+
 window.onload=function(){
 	var host = window.location.host;
 	host = host.indexOf(":3000") > 0 ? host.replace(":3000","") + ":8888" : host + ":8888";
 	console.log(host);
 	connect(host);
 	setupWebSpeechAPI();
-	$("#mic-fab").click(function(){
-		startVoiceRecognition();
+	$("#time").click(function(){
+		socket.emit('change-view', 'time')
 	});
-	
-	$("#headerButton").click(function(){
-		var appUrl = prompt("Install an app","App url");
-		if(appUrl!=null)
-			socket.emit('install-app',appUrl);
+	$("#date").click(function(){
+		socket.emit('change-view', 'date')
 	});
-	$("#closeButton").click(function(){
-		closeAppView();
-		socket.emit('launch-app',homeAppIndex);
+	$("#weather").click(function(){
+		socket.emit('change-view', 'temp')
 	});
-}
-
-function loadApps(list){
-	$("#appGrid").empty();
-	appList = list;
-	for(var i=0;i<list.length;i++){
-		if(i!=homeAppIndex){
-			var app = appList[i];
-			var icon = $("<div class='appIcon'><div class='innerIcon' style='background:"+app.color+"'>"+app.name.substring(0,1)+"</div>"+app.name+"</div>");
-			icon.appendTo("#appGrid");
-			(function(_i,_icon,_app) {
-			   _icon.click(function(){
-					socket.emit('launch-app',_i);
-			   });
-			}(i,icon,app));
-		}
-	}
-}
-
-function launchApp(index,icon){
-	if(index != homeAppIndex){
-		currentAppIndex = index;
-		var app = appList[index];
-		/*var el = icon.find(".innerIcon");
-		var x = el.position().left+10;
-		var y = el.position().top;
-		console.log(x,y);
-		el.css("transform","translate(-"+x+"px,-"+y+"px) scale(8)");
-		el.addClass("launchingApp");*/
-		$("#appActions").empty();
-		$("#appTitle").text(app.name);
-		$("#appBar").css("background",app.color);
-		$("#appMediaHeader").css("background-color",app.color);
-		$("#headerTitle").show().text(app.name);
-		$("#appView").css("background-color",app.color);
-		$("#browser-color").attr("content",app.color);
-		var x = icon ? icon.position().left+50 : 0;
-		var y = icon ? icon.position().top : 0;
-		$("#appView").css("display","block");
-		$("#appView").css("-webkit-transform-origin",x+"px,"+y+"px");
-		$("#appView").css("transform","scale(0)");
-		setTimeout(function(){
-			$("#appView").css("transform","scale(1)");
-		},50);
-	}
-}
-
-function closeAppView(){
-	$("#appActions").empty();
-	$("#appView").hide(300);
-	$("#appMediaHeader").css("background-image","none");
-	$("#headerTitle").text("");
-	$("#browser-color").attr("content","#ffffff");
-	$(".media-control").hide();
-	currentAppIndex = 0;
+	$("#rain").click(function(){
+		socket.emit('change-view', 'rain')
+	});
+	$("#news").click(function(){
+		socket.emit('change-view', 'news')
+	});
+	$("#compliment").click(function(){
+		socket.emit('change-view', 'compliment')
+	});
+	$("#Mobiletime").click(function(){
+		socket.emit('change-view', 'time')
+	});
+	$("#Mobiledate").click(function(){
+		socket.emit('change-view', 'date')
+	});
+	$("#Mobileweather").click(function(){
+		socket.emit('change-view', 'temp')
+	});
+	$("#Mobilerain").click(function(){
+		socket.emit('change-view', 'rain')
+	});
+	$("#Mobilenews").click(function(){
+		socket.emit('change-view', 'news')
+		reload();
+	});
+	$("#Mobilecompliment").click(function(){
+		socket.emit('change-view', 'compliment')
+	});
 }
 
 function connect(host){
 	localStorage.host = host;
 	socket = io(host);
-							
+
 	socket.on('connect', function (){
 		console.log("Connected!");
 	});
-	
-	socket.on('app-list', function (data){
-		var appList = data.apps;
-		homeAppIndex = data.home_app;
-		loadApps(appList);
+
+	socket.on('whats-running', function (data){
+		console.log("Recieved the new data!")
+		var [time,date,weather,rain,news,compliment] = data.split('/')
+		howToDisplay(time,date,weather,rain,news,compliment);
 	});
-		
+
+	socket.on('whats-updated', function(item, value){
+		console.log("WE GOT IT!")
+		if (String(item) === 'time') {
+			changeTime(value);
+		} else if (String(item) === 'date') {
+			changeDate(value);
+		} else if (String(item) === 'news') {
+			changeNews(value);
+		} else if (String(item) === 'temp') {
+			changeWeather(value);
+		} else if (String(item) === 'rain') {
+			changeRain(value);
+		} else if (String(item) === 'compliment'){
+			changeCompliment(value);
+		}
+	})
+
 	socket.on('current-app', function (appIndex){
 		launchApp(appIndex);
 	});
-	
+
+	socket.on('all-done', function(){
+		(function () {
+        location.reload();
+    }, 2000);
+	})
+
 	socket.on('app-launched', function (appIndex){
 		if(appIndex == currentAppIndex){
 			//TODO hide loader
@@ -111,7 +103,7 @@ function connect(host){
 			$("#headerTitle").fadeOut();
 		}
 	});
-		
+
 	socket.on('media-header-setup', function (mediaHeader){
 		var appIndex = mediaHeader.appIndex;
 		if(appIndex == currentAppIndex){
@@ -119,7 +111,7 @@ function connect(host){
 			$("#headerTitle").show().text(mediaHeader.title);
 		}
 	});
-		
+
 	socket.on('add-action', function (action){
 		var appIndex = action.appIndex;
 		if(appIndex == currentAppIndex){
@@ -141,18 +133,17 @@ function connect(host){
 			actionEl.hide().appendTo("#appActions").fadeIn(500);
 		}
 	});
-			
+
 	/*socket.on('action-reset', function (actions){
 		$("#remoteActions").empty();
 		$("#remoteMediaHeader").empty();
 	});
-		
+
 	socket.on('title', function (title){
 		$("#mQuery").val(title);
 	});*/
-		
+
 	socket.on('disconnect', function (){
-		closeAppView();
 		$("#remoteActions").empty();
 		$("#remoteMediaHeader").empty();
 		$("#appGrid").empty();
@@ -178,6 +169,183 @@ function inputRight(){
 	socket.emit('input',11);
 }
 
+function changeTime(value){
+	console.log(value)
+	if (String(value) === 'true'){
+		console.log("toggling on")
+		$("#timeImg").attr('src', '/img/Time_On.png');
+		$("#MobiletimeImg").attr('src', '/img/Time_On.png');
+	}else if (String(value) === 'false'){
+		console.log("toggling off")
+		$("#timeImg").attr('src', '/img/Time_Off.png');
+		$("#MobiletimeImg").attr('src', '/img/Time_Off.png');
+	}
+	(function () {
+		document.getElementById("time").innerHTML.reload
+		document.getElementById("Mobiletime").innerHTML.reload
+	}, 2000);
+}
+function changeDate(value){
+	if (String(value) === 'true'){
+		console.log("toggling on")
+		$("#dateImg").attr('src', '/img/Date_On.png');
+		$("#MobiledateImg").attr('src', '/img/Date_On.png');
+	}else if (String(value) === 'false'){
+		console.log("toggling off")
+		$("#dateImg").attr('src', '/img/Date_Off.png');
+		$("#MobiledateImg").attr('src', '/img/Date_Off.png');
+	}
+	(function () {
+		document.getElementById("date").innerHTML.reload
+		document.getElementById("Mobiledate").innerHTML.reload
+	}, 2000);
+}
+function changeNews(value){
+	if (String(value) === 'true'){
+		console.log("toggling on")
+		$("#newsImg").attr('src', '/img/News_On.png');
+		$("#MobilenewsImg").attr('src', '/img/News_On.png');
+	}else if (String(value) === 'false'){
+		console.log("toggling off")
+		$("#newsImg").attr('src', '/img/News_Off.png');
+		$("#MobilenewsImg").attr('src', '/img/News_Off.png');
+	}
+	(function () {
+		document.getElementById("news").innerHTML.reload
+		document.getElementById("Mobilenews").innerHTML.reload
+	}, 2000);
+}
+function changeWeather(value){
+	if (String(value) === 'true'){
+		console.log("toggling on")
+		$("#weatherImg").attr('src', '/img/Weather_On.png');
+		$("#MobileweatherImg").attr('src', '/img/Weather_On.png');
+	}else if (String(value) === 'false'){
+		console.log("toggling off")
+		$("#weatherImg").attr('src', '/img/Weather_Off.png');
+		$("#MobileweatherImg").attr('src', '/img/Weather_Off.png');
+	}
+	(function () {
+		document.getElementById("weather").innerHTML.reload
+		document.getElementById("Mobileweather").innerHTML.reload
+	}, 2000);
+}
+function changeRain(value){
+	if (String(value) === 'true'){
+		console.log("toggling on")
+		$("#rainImg").attr('src', '/img/Rain_On.png');
+		$("#MobilerainImg").attr('src', '/img/Rain_On.png');
+	}else if (String(value) === 'false'){
+		console.log("toggling off")
+		$("#rainImg").attr('src', '/img/Rain_Off.png');
+		$("#MobilerainImg").attr('src', '/img/Rain_Off.png');
+	}
+	(function () {
+		document.getElementById("rain").innerHTML.reload
+		document.getElementById("Mobilerain").innerHTML.reload
+	}, 2000);
+}
+function changeCompliment(value){
+	if (String(value) === 'true'){
+		console.log("toggling on")
+		$("#complimentImg").attr('src', '/img/Compliment_On.png');
+		$("#MobilecomplimentImg").attr('src', '/img/Compliment_On.png');
+	}else if (String(value) === 'false'){
+		console.log("toggling off")
+		$("#complimentImg").attr('src', '/img/Compliment_Off.png');
+		$("#MobilecomplimentImg").attr('src', '/img/Compliment_Off.png');
+	}
+	(function () {
+		document.getElementById("compliment").innerHTML.reload
+		document.getElementById("Mobilecompliment").innerHTML.reload
+	}, 2000);
+}
+
+function howToDisplay(time, date, weather, rain, news, compliment) {
+	//This function is used to determine how to render the icons... weather they are on or off.
+	//We will recieve a bunch of variables... they will either be 'true' or 'false'
+	console.log(time+"/"+date+"/"+weather+"/"+rain+"/"+news+"/"+compliment)
+	console.log("Came through here!")
+	if (String(time) === 'true'){
+		console.log("Should be on!");
+		$("#timeImg").attr('src', '/img/Time_On.png');
+		$("#MobiletimeImg").attr('src', '/img/Time_On.png');
+		document.getElementById("time").innerHTML.reload
+		document.getElementById("Mobiletime").innerHTML.reload
+	}else if(String(time) === 'false') {
+		console.log("Should be off!");
+		$("#timeImg").attr('src', '/img/Time_Off.png');
+		$("#MobiletimeImg").attr('src', '/img/Time_Off.png');
+		document.getElementById("time").innerHTML.reload
+		document.getElementById("Mobiletime").innerHTML.reload
+	}
+	if (String(date) === 'true'){
+		console.log("Should be on!");
+		$("#dateImg").attr('src', '/img/Date_On.png');
+		$("#MobiledateImg").attr('src', '/img/Date_On.png');
+		document.getElementById("date").innerHTML.reload
+		document.getElementById("Mobiledate").innerHTML.reload
+	}else if(String(date) === 'false') {
+		console.log("Should be off!");
+		$("#dateImg").attr('src', '/img/Date_Off.png');
+		$("#MobiledateImg").attr('src', '/img/Date_Off.png');
+		document.getElementById("date").innerHTML.reload
+		document.getElementById("Mobiledate").innerHTML.reload
+	}
+	if (String(weather) === 'true'){
+		console.log("Should be on!");
+		$("#weatherImg").attr('src', '/img/Weather_On.png');
+		$("#MobileweatherImg").attr('src', '/img/Weather_On.png');
+		document.getElementById("weather").innerHTML.reload
+		document.getElementById("Mobileweather").innerHTML.reload
+	}else if(String(weather) === 'false') {
+		console.log("Should be off!");
+		$("#weatherImg").attr('src', '/img/Weather_Off.png');
+		$("#MobileweatherImg").attr('src', '/img/Weather_Off.png');
+		document.getElementById("weather").innerHTML.reload
+		document.getElementById("Mobileweather").innerHTML.reload
+	}
+	if (String(rain) === 'true'){
+		console.log("Should be on!");
+		$("#rainImg").attr('src', '/img/Rain_On.png');
+		$("#MobilerainImg").attr('src', '/img/Rain_On.png');
+		document.getElementById("rain").innerHTML.reload
+		document.getElementById("Mobilerain").innerHTML.reload
+	}else if(String(rain) === 'false') {
+		console.log("Should be off!");
+		$("#rainImg").attr('src', '/img/Rain_Off.png');
+		$("#MobilerainImg").attr('src', '/img/Rain_Off.png');
+		document.getElementById("rain").innerHTML.reload
+		document.getElementById("Mobilerain").innerHTML.reload
+	}
+	if (String(news) === 'true'){
+		console.log("Should be on!");
+		$("#newsImg").attr('src', '/img/News_On.png');
+		$("#MobilenewsImg").attr('src', '/img/News_On.png');
+		document.getElementById("news").innerHTML.reload
+		document.getElementById("Mobilenews").innerHTML.reload
+	}else if(String(news) === 'false') {
+		console.log("Should be off!");
+		$("#newsImg").attr('src', '/img/News_Off.png');
+		$("#MobilenewsImg").attr('src', '/img/News_Off.png');
+		document.getElementById("news").innerHTML.reload
+		document.getElementById("Mobilenews").innerHTML.reload
+	}
+	if (String(compliment) === 'true'){
+		console.log("Should be on!");
+		$("#complimentImg").attr('src', '/img/Compliment_On.png');
+		$("#MobilecomplimentImg").attr('src', '/img/Compliment_On.png');
+		document.getElementById("compliment").innerHTML.reload
+		document.getElementById("Mobilecompliment").innerHTML.reload
+	}else if(String(compliment) === 'false') {
+		console.log("Should be off!");
+		$("#complimentImg").attr('src', '/img/Compliment_Off.png');
+		$("#MobilecomplimentImg").attr('src', '/img/Compliment_Off.png');
+		document.getElementById("compliment").innerHTML.reload
+		document.getElementById("Mobilecompliment").innerHTML.reload
+	}
+}
+
 var recognizing=false;
 var ignore_onend;
 var final_transcript;
@@ -191,7 +359,7 @@ function setupWebSpeechAPI(){
 	  recognition = new webkitSpeechRecognition();
 	  recognition.continuous = true;
 	  recognition.interimResults = true;
-	  
+
 	  recognition.onstart = function() {
 		recognizing = true;
 		$("#mic-fab").addClass("active");
@@ -200,14 +368,14 @@ function setupWebSpeechAPI(){
 			$("#voice-input").text("Listening...");
 		},300);
 	  };
-	  
+
 	  recognition.onerror = function(event) {
 		$("#mic-fab").removeClass("active");
 		$("#voice-input").removeClass("active")
 		$("#voice-input").text("");
 		ignore_onend = true;
 	  };
-	  
+
 	  recognition.onend = function() {
 		recognizing = false;
 		if (ignore_onend) {
@@ -224,7 +392,7 @@ function setupWebSpeechAPI(){
 			return;
 		}
 	  };
-	  
+
 	  recognition.onresult = function(event) {
 		var interim_transcript = '';
 		for (var i = event.resultIndex; i < event.results.length; ++i) {
@@ -236,7 +404,7 @@ function setupWebSpeechAPI(){
 		}
 		$("#voice-input").text(final_transcript);
 	  };
-	  
+
 	}
 }
 function startVoiceRecognition(event) {
@@ -253,4 +421,3 @@ function startVoiceRecognition(event) {
 		socket.emit('trigger-voice');
 	}
 }
-

@@ -32,6 +32,8 @@ displayer.getStatus = function () {
       currentTimeEl.css("display", "none")
       if ($('.date').hasClass('move-up')) {
         $('.date').removeClass('move-up')
+        socketIO.emit('what-updated', 'time', 'false')
+        socketIO.emit('all-done')
       }
     }
   }else if (currentTimeEl.hasClass(Hidden)) {
@@ -40,6 +42,8 @@ displayer.getStatus = function () {
       currentTimeEl.addClass(Shown)
       currentTimeEl.css("display", "block")
       $('.date').addClass('move-up')
+      socketIO.emit('what-updated', 'time', 'true')
+      socketIO.emit('all-done')
     }
   }
 
@@ -48,12 +52,16 @@ displayer.getStatus = function () {
       currentCompEl.removeClass(Shown)
       currentCompEl.addClass(Hidden)
       currentCompEl.css("display", "none")
+      socketIO.emit('what-updated', 'compliment', 'false')
+      socketIO.emit('all-done')
     }
   }else if (currentCompEl.hasClass(Hidden)) {
     if (complimentsEl) {
       currentCompEl.removeClass(Hidden)
       currentCompEl.addClass(Shown)
       currentCompEl.css("display", "block")
+      socketIO.emit('what-updated', 'compliment', 'true')
+      socketIO.emit('all-done')
     }
   }
 
@@ -62,12 +70,16 @@ displayer.getStatus = function () {
       currentWeather.removeClass(Shown)
       currentWeather.addClass(Hidden)
       currentWeather.css("display", "none")
+      socketIO.emit('what-updated', 'weather', 'false')
+      socketIO.emit('all-done')
     }
   }else if (currentWeather.hasClass(Hidden)) {
     if (weatherEl) {
       currentWeather.removeClass(Hidden)
       currentWeather.addClass(Shown)
       currentWeather.css("display", "block")
+      socketIO.emit('what-updated', 'weather', 'true')
+      socketIO.emit('all-done')
     }
   }
 
@@ -75,14 +87,17 @@ displayer.getStatus = function () {
     if (!newsEl) {
       currentNewsEl.removeClass(Shown)
       currentNewsEl.addClass(Hidden)
-      console.log("WE NEED TO HIDE THIS!")
       currentNewsEl.css("display", "none")
+      socketIO.emit('what-updated', 'news', 'false')
+      socketIO.emit('all-done')
     }
   } else if (currentNewsEl.hasClass(Hidden)) {
     if (newsEl) {
       currentNewsEl.removeClass(Hidden)
       currentNewsEl.addClass(Shown)
       currentNewsEl.css("display", "block")
+      socketIO.emit('what-updated', 'news', 'true')
+      socketIO.emit('all-done')
     }
   }
 
@@ -91,12 +106,16 @@ displayer.getStatus = function () {
       currentDateEl.removeClass(Shown)
       currentDateEl.addClass(Hidden)
       currentDateEl.css("display", "none")
+      socketIO.emit('what-updated', 'date', 'false')
+      socketIO.emit('all-done')
     }
   } else if (currentDateEl.hasClass(Hidden)) {
     if (dateEl) {
       currentDateEl.removeClass(Hidden)
       currentDateEl.addClass(Shown)
       currentDateEl.css("display", "block")
+      socketIO.emit('what-updated', 'date', 'true')
+      socketIO.emit('all-done')
     }
   }
 
@@ -105,12 +124,16 @@ displayer.getStatus = function () {
       currentRainEl.removeClass(Shown)
       currentRainEl.addClass(Hidden)
       currentRainEl.css("display", "none")
+      socketIO.emit('what-updated', 'rain', 'false')
+      socketIO.emit('all-done')
     }
   } else if (currentRainEl.hasClass(Hidden)) {
     if (rainEl) {
       currentRainEl.removeClass(Hidden)
       currentRainEl.addClass(Shown)
       currentRainEl.css("display", "block")
+      socketIO.emit('what-updated', 'rain', 'true')
+      socketIO.emit('all-done')
     }
   }
 }
