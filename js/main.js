@@ -41,6 +41,7 @@ jQuery(document).ready(function($) {
 
 	time.init();
 
+	//asher.init();
 	//reminder.init();
 
 	calendar.init();

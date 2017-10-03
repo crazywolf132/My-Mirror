@@ -4,12 +4,14 @@ var remoteApp = {
 }
 var socketIO;
 var view;
+var asher;
 
 var Config = require('config-js');
 var config = new Config('./config/default.js');
 
 remoteApp.init = function () {
   view = new View();
+  asher = new Asher();
   var MAIN_DIR = __dirname.replace("system","");
   console.log(__dirname)
   var connect = require('connect');
@@ -32,10 +34,10 @@ remoteApp.init = function () {
 			launchAppWithQuery(query);
 		});
 
-		socket.on('launch-app', function (index) {
-			console.log("Launching app "+index+" from remote app");
-			launchApp(appData[index],null);
-		});
+    socket.on('the-text', function (result) {
+      console.log(result)
+      asher.showMessage(result)
+    })
 
 		socket.on('install-app', function (url) {
 			installApp(url);
@@ -70,7 +72,6 @@ function changeIcons(item) {
 
   shell.on('message', function (message) {
     // received a message sent from the Python script (a simple "print" statement)
-    console.log(message)
     socketIO.emit('whats-updated', item, message)
     socketIO.emit('all-done')
   });

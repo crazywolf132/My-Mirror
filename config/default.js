@@ -3,7 +3,7 @@ module.exports = {
     time: true,
     compliment: true,
     temp: true,
-    news: false,
+    news: true,
     date: true,
     rain: true
   }

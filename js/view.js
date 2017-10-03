@@ -6,6 +6,6 @@ var View = function() {
     var time = 2400;
     setTimeout(function(){
       notesEl.text("")
-    },time)
+    }, time)
   }
 }
