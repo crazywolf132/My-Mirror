@@ -1,33 +1,48 @@
-var view;
+var asher = {
+  updateInterval: 0,
+  intervalId: null
+}
 
-var Asher = function() {
+var view;
+var asherSocket;
+
+asher.incomming = function () {
   console.log("Starting server!")
   net = require('net');
   view = new View();
 
   net.createServer(function (socket) {
-    view.showMessage("Asher Connected!")
     // Handle incoming messages from clients.
     socket.on('data', function (data) {
-      var recieved = String(data)
-      var [option, msg] = recieved.split("$x")
-      if (String(option) == "response"){
-        console.log("message: " + msg)
-        view.showMessage(String(msg))
-      }else if (String(option) == "question"){
-        console.log('sending.... ')
-        socket.write(String(msg))
-      }
-      console.log("did i get it?")
-      console.log(recieved)
-      console.log(option)
-
+     var recieved = String(data)
+     view.asherMessage(recieved)
     });
 
-
-    // Remove the client from the list when it leaves
-    socket.on('end', function () {
-      view.showMessage("Asher Disconnect!")
-    });
   }).listen(5000);
+
+}
+
+asher.outGoing = function (Msg) {
+  var net = require('net');
+
+  asherSocket = new net.Socket();
+  asherSocket.connect(4416, 'localhost', function() {
+  	asherSocket.write(String(Msg));
+  });
+
+  asherSocket.on('data', function(data) {
+  	view.asherMessage(String(data))
+  	asherSocket.destroy(); // kill client after server's response
+  });
+
+  asherSocket.on('close', function() {
+  	console.log('Connection closed');
+  });
+}
+
+
+asher.init = function () {
+  view = new View();
+  view.asherMessage("Asher connected!")
+  this.incomming();
 }
