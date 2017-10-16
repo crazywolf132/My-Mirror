@@ -13,6 +13,7 @@
     "fs": "0.0.1-security",
     "jquery": "^3.2.1",
     "ncp": "",
+    "net-socket": "^1.1.0",
     "pug": "^2.0.0-rc.4",
     "python-shell": "^0.4.0",
     "q": "",
