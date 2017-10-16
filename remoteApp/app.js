@@ -5,7 +5,6 @@ var MEDIA_HEADER_LAYOUT_FULL = 799;
 var MEDIA_HEADER_LAYOUT_PLAY_PAUSE = 800;
 
 var socket;
-var asher;
 var currentAppIndex;
 var homeAppIndex=0;
 
@@ -16,7 +15,6 @@ window.onload=function(){
 	host = host.indexOf(":3000") > 0 ? host.replace(":3000","") + ":8888" : host + ":8888";
 	console.log(host);
 	connect(host);
-	connectToAsher();
 	setupWebSpeechAPI();
 	$("#time").click(function(){
 		socket.emit('change-view', 'time')
@@ -58,7 +56,7 @@ window.onload=function(){
 	$("#asher").click(function(){
 		startDictation();
 	});
-	$("#Mobileasher").click(function(){
+	$("#MobileAsher").click(function(){
 		startDictation();
 	});
 }
@@ -335,8 +333,8 @@ function startDictation() {
       recognition.start();
 
       recognition.onresult = function(e) {
-				//socket.emit('the-text', e.results[0][0].transcript);
-				sendToAsher(e.results[0][0].transcript)
+				socket.emit('the-text', e.results[0][0].transcript);
+				//sendToAsher(e.results[0][0].transcript)
 				console.log(e.results[0][0].transcript)
         recognition.stop();
       };
@@ -347,16 +345,3 @@ function startDictation() {
 
     }
   }
-function connectToAsher() {
-	var place = window.location.host;
-	place = place.indexOf(":3000") > 0 ? place.replace(":3000","") + ":5000" : place + ":5000";
-	localStorage.host = place;
-	asher = io(place);
-
-	asher.on('connect', function (){
-		console.log("Connected to asher!");
-	})
-}
-function sendToAsher(Msg) {
-	asher.emit('data', "question$x" + String(Msg))
-}
