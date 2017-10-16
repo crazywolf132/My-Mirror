@@ -4,14 +4,12 @@ var remoteApp = {
 }
 var socketIO;
 var view;
-var asher;
 
 var Config = require('config-js');
 var config = new Config('./config/default.js');
 
 remoteApp.init = function () {
   view = new View();
-  asher = new Asher();
   var MAIN_DIR = __dirname.replace("system","");
   console.log(__dirname)
   var connect = require('connect');
@@ -36,7 +34,7 @@ remoteApp.init = function () {
 
     socket.on('the-text', function (result) {
       console.log(result)
-      asher.showMessage(result)
+      asher.outGoing(result)
     })
 
 		socket.on('install-app', function (url) {
