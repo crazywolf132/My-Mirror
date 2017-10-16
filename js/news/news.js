@@ -147,6 +147,6 @@ news.init = function () {
 
 	this.intervalId = setInterval(function () {
 		this.showNews();
-	}.bind(this), this.updateInterval);
+	}.bind(this), 5500 + (Msg.length * 20));
 
 }
