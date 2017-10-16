@@ -1,5 +1,5 @@
 var weather = {
-  updateInterval: config.weather.interval || 900000,
+  updateInterval: config.weather.interval || 1800000,
 	fadeInterval: config.weather.fadeInterval || 1000,
 	intervalId: null,
 }
